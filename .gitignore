@@ -1,0 +1,17 @@
+
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.backup
+.terraform.lock.hcl
+
+# Lambda build artifacts
+lambda/node_modules/
+lambda/nearby-search.zip
+
+# Next.js build output
+frontend/.next/
+frontend/out/
+frontend/node_modules/
+terraform/.terraform/
+terraform/.terraform/

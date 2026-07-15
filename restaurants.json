@@ -1,0 +1,9 @@
+[
+  {"id": "1", "name": "The Halal Guys", "type": "restaurant", "cuisine": "Middle Eastern", "address": "3432 Wilshire Blvd, Los Angeles, CA 90010", "lat": 34.0616, "lng": -118.2987},
+  {"id": "2", "name": "Biriyani Kabob House", "type": "restaurant", "cuisine": "Indian/Pakistani", "address": "Koreatown, Los Angeles, CA", "lat": 34.0594, "lng": -118.3009},
+  {"id": "3", "name": "Noya Kitchen", "type": "restaurant", "cuisine": "Asian Fusion / Sushi", "address": "Koreatown, Los Angeles, CA", "lat": 34.0601, "lng": -118.2965},
+  {"id": "4", "name": "TehranRo Grill", "type": "restaurant", "cuisine": "Persian", "address": "Koreatown, Los Angeles, CA", "lat": 34.0580, "lng": -118.3021},
+  {"id": "5", "name": "Salam Falafel", "type": "restaurant", "cuisine": "Middle Eastern", "address": "Koreatown, Los Angeles, CA", "lat": 34.0625, "lng": -118.2950},
+  {"id": "6", "name": "Levant Mediterranean Restaurant & Catering", "type": "restaurant", "cuisine": "Mediterranean", "address": "Los Angeles, CA", "lat": 34.0640, "lng": -118.3040},
+  {"id": "7", "name": "Navat Halal", "type": "food_truck", "cuisine": "Halal Street Food", "address": "W Olympic Blvd, Downtown LA, CA", "lat": 34.0459, "lng": -118.2645}
+]
