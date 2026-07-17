@@ -15,3 +15,5 @@ frontend/out/
 frontend/node_modules/
 terraform/.terraform/
 terraform/.terraform/
+.env.local
+node_modules/
