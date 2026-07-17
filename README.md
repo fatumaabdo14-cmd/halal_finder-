@@ -83,4 +83,26 @@ aws s3 sync out/ s3://your-bucket-name --delete
 
 ---
 
+## Troubleshooting
+
+**Site shows a blank page**
+Likely an issue with Flow A (webpage delivery). Check:
+1. Browser console for errors (right-click → Inspect → Console)
+2. Hard refresh (Cmd+Shift+R) — CloudFront may be serving a stale cache
+3. Confirm files exist in the S3 bucket
+4. Confirm the CloudFront distribution status is "Deployed" in the AWS Console
+
+**Page loads but restaurant list never appears (stuck on "Finding nearby halal spots...")**
+Likely an issue with Flow B (data delivery). Check:
+1. Test the API endpoint directly in a browser: `https://[your-api-url]/nearby?lat=34.06&lng=-118.30` — isolates whether the issue is frontend or backend
+2. If the API fails, check CloudWatch Logs for the Lambda function — shows the actual runtime error
+3. If Lambda logs show a permissions error, check the IAM role policy in `lambda.tf`
+4. If Lambda runs but returns empty data, confirm DynamoDB actually has data (`terraform/../lambda/seed.js` may need to be re-run)
+
+**Terraform changes aren't being detected (`terraform plan` shows "No changes" unexpectedly)**
+Verify the file was actually saved to disk in the correct folder — check directly with `cat filename.tf` in the terminal rather than trusting the editor's display, since editors can occasionally save to unexpected locations.
+
+**Deploy updates aren't showing on the live site**
+CloudFront caches aggressively. After `aws s3 sync`, allow a few minutes, or hard refresh (Cmd+Shift+R) to bypass the browser's own cache.
+
 Built by Fatuma — cloud engineer.
