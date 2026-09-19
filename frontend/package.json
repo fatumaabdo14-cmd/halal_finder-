@@ -9,6 +9,8 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@aws-sdk/client-cognito-identity-provider": "^3.1132.0",
+    "crypto": "^1.0.1",
     "leaflet": "^1.9.4",
     "next": "16.2.10",
     "react": "19.2.4",

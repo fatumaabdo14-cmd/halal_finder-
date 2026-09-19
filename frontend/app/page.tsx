@@ -1,11 +1,13 @@
 "use client";
-import { useState, useEffect, ComponentType } from "react";
-import dynamic from "next/dynamic";
-const Map = dynamic(() => import("./Map"), { ssr: false }) as unknown as ComponentType<{
-  restaurants: Restaurant[];
-}>;
 
-const API_URL = "https://6b0eilnz2k.execute-api.us-west-1.amazonaws.com/nearby";
+import { useState, useEffect } from "react";
+import dynamic from "next/dynamic";
+import HalalLogin from "./components/HalalLogin";
+
+const Map = dynamic(() => import("./Map"), { ssr: false });
+
+const API_URL =
+  "https://6b0e1lnz2k.execute-api.us-west-1.amazonaws.com/nearby";
 
 export type Restaurant = {
   id: string;
@@ -26,89 +28,94 @@ export default function Home() {
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(
       async (position) => {
-        const { latitude, longitude } = position.coords;
-        setStatus("Finding nearby halal spots...");
+        try {
+          const { latitude, longitude } = position.coords;
+          setStatus("Finding nearby halal spots...");
 
-        const res = await fetch(`${API_URL}?lat=${latitude}&lng=${longitude}`);
-        const data = await res.json();
-        setRestaurants(data);
-        setStatus("");
+          const res = await fetch(
+            `${API_URL}?lat=${latitude}&lng=${longitude}`
+          );
+          const data = await res.json();
+          setRestaurants(data);
+          setStatus("");
+        } catch (error) {
+          console.error('Failed to fetch restaurants:', error);
+          setStatus("Could not fetch restaurants. Check your connection.");
+        }
       },
-      () => setStatus("Location access denied. Please enable it in your browser settings.")
+      () => setStatus("Location access denied. Please enable it in your browser settings")
     );
   }, []);
-
-  const cuisines = [
-    "All",
-    ...Array.from(new Set(restaurants.map((r) => r.cuisine))),
-  ];
 
   const filteredRestaurants =
     cuisineFilter === "All"
       ? restaurants
       : restaurants.filter((r) => r.cuisine === cuisineFilter);
 
+  const cuisines = [
+    "All",
+    ...new Set(restaurants.map((r) => r.cuisine)),
+  ];
+
   return (
-    <main className="min-h-screen bg-gradient-to-b from-emerald-50 to-white px-4 py-10 sm:px-8">
-      <div className="mx-auto max-w-2xl">
-        <div className="mb-8 text-center">
-          <h1 className="text-3xl font-bold tracking-tight text-emerald-900 sm:text-4xl">
-            🕌 Halal Spots Near You
-          </h1>
-          <p className="mt-2 text-sm text-emerald-700">
-            Restaurants and food trucks sorted by distance from you
-          </p>
+    <main className="min-h-screen bg-gradient-to-b from-emerald-50 to-white px-4 py-10 sm:px-6">
+      <HalalLogin />
+
+      <div className="mb-8 text-center">
+        <h1 className="text-3xl font-bold tracking-tight text-emerald-900 sm:text-4xl">
+          🕌 Halal Spots Near You
+        </h1>
+        <p className="mt-2 text-sm text-emerald-700">
+          Restaurants and food trucks sorted by distance from you
+        </p>
+      </div>
+
+      {status && (
+        <div className="mb-6 rounded-xl bg-emerald-100 px-4 py-3 text-center text-sm font-medium text-emerald-800">
+          {status}
+        </div>
+      )}
+
+      {restaurants.length > 0 && (
+        <div className="mb-4 flex flex-wrap gap-2">
+          {cuisines.map((c) => (
+            <button
+              key={c}
+              onClick={() => setCuisineFilter(c)}
+              className={`rounded-full px-3 py-1 text-xs font-medium transition ${
+                cuisineFilter === c
+                  ? "bg-emerald-600 text-white"
+                  : "bg-emerald-100 text-emerald-700 hover:bg-emerald-200"
+              }`}
+            >
+              {c}
+            </button>
+          ))}
+        </div>
+      )}
+
+      <div className="grid gap-6 lg:grid-cols-3">
+        <div className="lg:col-span-2">
+          <Map restaurants={filteredRestaurants} />
         </div>
 
-        {status && (
-          <div className="mb-6 rounded-xl bg-emerald-100 px-4 py-3 text-center text-sm font-medium text-emerald-800">
-            {status}
-          </div>
-        )}
-
-        {restaurants.length > 0 && (
-          <div className="mb-4 flex flex-wrap gap-2">
-            {cuisines.map((c) => (
-              <button
-                key={c}
-                onClick={() => setCuisineFilter(c)}
-                className={`rounded-full px-3 py-1 text-xs font-medium transition ${
-                  cuisineFilter === c
-                    ? "bg-emerald-600 text-white"
-                    : "bg-emerald-100 text-emerald-700 hover:bg-emerald-200"
-                }`}
-              >
-                {c}
-              </button>
-            ))}
-          </div>
-        )}
-<Map restaurants={filteredRestaurants} />
-        <ul className="space-y-3">
-          {filteredRestaurants.map((r) => (
-            <li
-              key={r.id}
-              className="rounded-2xl border border-emerald-100 bg-white p-4 shadow-sm transition hover:shadow-md"
+        <div className="space-y-4">
+          {filteredRestaurants.map((restaurant) => (
+            <div
+              key={restaurant.id}
+              className="rounded-lg border border-emerald-200 bg-white p-4 shadow-sm transition hover:shadow-md"
             >
-              <div className="flex items-start justify-between gap-3">
-                <div>
-                  <h2 className="font-semibold text-gray-900">{r.name}</h2>
-                  <p className="mt-1 text-sm text-gray-500">
-                    {r.cuisine} · {r.address}
-                  </p>
-                </div>
-                <span className="shrink-0 rounded-full bg-emerald-600 px-3 py-1 text-xs font-semibold text-white">
-                  {r.distanceMiles} mi
-                </span>
-              </div>
-              {r.type === "food_truck" && (
-                <span className="mt-2 inline-flex rounded-full bg-emerald-100 px-2 py-1 text-xs font-medium text-emerald-800">
-                  Food truck
-                </span>
-              )}
-            </li>
+              <h3 className="font-semibold text-emerald-900">
+                {restaurant.name}
+              </h3>
+              <p className="text-sm text-gray-600">{restaurant.cuisine}</p>
+              <p className="text-sm text-gray-500">{restaurant.address}</p>
+              <p className="mt-2 text-sm font-medium text-emerald-600">
+                {restaurant.distanceMiles.toFixed(1)} miles away
+              </p>
+            </div>
           ))}
-        </ul>
+        </div>
       </div>
     </main>
   );
