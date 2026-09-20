@@ -1,36 +1,119 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Halal Finder - AWS Security Architecture
 
-## Getting Started
+## Project Summary
+Implemented complete CIA Triad security model for restaurant data management application.
 
-First, run the development server:
+## Labs Completed
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+### ✅ Lab 1: Authentication (Cognito)
+- User Pool: HalalFinderUsers
+- JWT token generation
+- Test user: fatuma@example.com
+- Status: TESTED & WORKING ✅
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### ✅ Lab 2: Authorization (Lambda)
+- JWT validation
+- Ownership-based access control
+- Returns 403 Forbidden for unauthorized users
+- Status: DEPLOYED & WORKING ✅
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### ✅ Lab 3: Encryption (KMS)
+- KMS key: halal-finder-encryption-key
+- Restaurant data encrypted at rest
+- Integrated with Lambda
+- Status: DEPLOYED & WORKING ✅
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### ✅ Lab 4: Audit Logging (CloudTrail)
+- All API calls logged automatically
+- User actions tracked
+- Status: ACTIVE & RECORDING ✅
 
-## Learn More
+### ✅ Lab 5: Risk Assessment
+- Risks Addressed:
+  1. Unauthorized Access → Mitigated by Cognito + JWT
+  2. Unauthorized Data Modification → Mitigated by Lambda Authorization
+  3. Data Breach → Mitigated by KMS Encryption
+  4. Compliance/Audit Trail → Addressed by CloudTrail
 
-To learn more about Next.js, take a look at the following resources:
+- Remaining Risks:
+  1. Transport Security (HTTPS/TLS) - Implemented by API Gateway
+  2. Network Security - Requires VPC configuration
+  3. Access Control Lists - Can be enhanced with IAM policies
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- Security Posture: **STRONG** ✅
+  - Multi-layer security (Authentication → Authorization → Encryption)
+  - Full audit trail
+  - Industry best practices implemented
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Security Architecture Flow
+User Login
+↓
+Cognito (Authentication) → JWT Token
+↓
+Lambda (Authorization) → Verify Ownership → 200/403
+↓
+KMS (Encryption) → Encrypt Data
+↓
+DynamoDB (Storage) → Save Encrypted Data
+↓
+CloudTrail (Audit) → Log Everything
 
-## Deploy on Vercel
+## CIA Triad Coverage
+- **Confidentiality** ✅ - KMS Encryption
+- **Integrity** ✅ - CloudTrail Logging  
+- **Availability** ✅ - DynamoDB Point-in-Time Recovery
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Deployed Resources
+- Cognito User Pool: HalalFinderUsers
+- Lambda: halal-finder-update-restaurant
+- KMS Key: halal-finder-encryption-key
+- DynamoDB Table: halal-finder-locations
+- CloudTrail: Enabled globally
+- API Gateway: REST API endpoint
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Technologies Used
+- AWS Cognito (Authentication)
+- AWS Lambda (Authorization)
+- AWS KMS (Encryption)
+- AWS DynamoDB (Data Storage)
+- AWS CloudTrail (Audit Logging)
+- AWS API Gateway (REST API)
+- AWS CDK (Infrastructure as Code - TypeScript)
+
+## Implementation Methods
+
+### Console Deployment ✅
+- All resources created and tested
+- Screenshots documented
+- Working endpoints confirmed
+
+### CDK Deployment (Code)
+- Complete TypeScript infrastructure code
+- Fully parameterized
+- Ready for production
+- Repository: halal-finder-security-cdk
+
+## Architecture Diagram
+![Architecture](architecture.png)
+
+## What I Learned
+1. Authentication vs Authorization differences
+2. How JWT tokens work
+3. KMS encryption at rest
+4. CloudTrail for compliance/audit
+5. Infrastructure as Code with CDK
+6. AWS security best practices
+7. CIA Triad implementation
+
+## Repositories
+- **Main Project:** https://github.com/fatumaabdo14-cmd/halal_finder-
+- **CDK Project:** https://github.com/fatumaabdo14-cmd/halal-finder-security-cdk
+
+## Submission Status
+✅ All 5 labs complete
+✅ Console deployment verified
+✅ CDK code written
+✅ GitHub repositories created
+✅ Documentation complete
+✅ Architecture diagram included
+✅ Ready for submission
