@@ -14,7 +14,9 @@ Finding halal food outside of well-known areas often relies on word of mouth. Th
 
 ## Architecture
 
-![Architecture Diagram](./architecture.png)
+
+<img width="1014" height="826" alt="Screen Shot 2026-07-15 at 9 36 42 AM" src="https://github.com/user-attachments/assets/cac101c7-2ef8-46a8-b9de-8a4f6838f906" />
+
 
 There are two independent flows in this app:
 
